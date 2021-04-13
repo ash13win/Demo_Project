@@ -2,6 +2,8 @@ import { CSVDownload, CSVLink } from "react-csv";
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { Container } from "@material-ui/core";
+
 const headers = [
   { label: "Time", key: "time" },
   { label: "Date", key: "date" },
@@ -15,8 +17,13 @@ function App() {
   const [timeValue, setstate] = useState(
     `${time.getHours()}h ${time.getMinutes()}m ${time.getSeconds()}s`
   );
+  const [isshowTimer, showTimer] = useState(false);
 
   const [data, setData] = useState([]);
+
+  const handleTimerVisibitliy = () => {
+    showTimer(true);
+  };
 
   const handleButtonClick = (e) => {
     setstate(`${time.getHours()}h ${time.getMinutes()}m ${time.getSeconds()}s`);
@@ -44,29 +51,61 @@ function App() {
         <Grid item xs={6}>
           <Grid container justify="center">
             <Button
+              onClick={handleTimerVisibitliy}
               variant="contained"
-              color="primary"
-              onClick={handleButtonClick}
+              style={{
+                backgroundColor: "#f44336",
+                color: "#fafafa",
+                margin: 20,
+              }}
             >
-              Click Me
+              ON
+            </Button>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#00e676",
+                color: "#fafafa",
+                margin: 20,
+              }}
+            >
+              OFF
             </Button>
           </Grid>
         </Grid>
 
-        <Grid item xs={6} justify="center">
-          <p>{timeValue}</p>
-          <div>
-            <h3>Export data</h3>
-            <CSVLink
-              data={data}
-              headers={headers}
-              onClick={onDownloadLinkCick}
-              target="_blank"
-            >
-              Export to CSV
-            </CSVLink>
-          </div>
-        </Grid>
+        {isshowTimer ? (
+          <Grid item xs={6} justify="center">
+            <Grid container>
+              <Grid item xs={6} alignItems="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginTop: 50 }}
+                  onClick={handleButtonClick}
+                >
+                  CLick me to generate time
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <p>{timeValue}</p>
+                <div>
+                  <h3>Export data</h3>
+                  <CSVLink
+                    data={data}
+                    headers={headers}
+                    onClick={onDownloadLinkCick}
+                    target="_blank"
+                  >
+                    Export to CSV
+                  </CSVLink>
+                </div>
+              </Grid>
+            </Grid>
+          </Grid>
+        ) : (
+          <container></container>
+        )}
       </Grid>
     </div>
   );
